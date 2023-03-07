@@ -109,7 +109,7 @@ public class Main extends JFrame implements Runnable, ChangeListener {
     }
 
     private void display() {
-        setSize(600, 400);
+        setSize(700, 400);
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
