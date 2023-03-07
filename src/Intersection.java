@@ -12,7 +12,11 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Intersection implements Runnable {
-    private static final String[] COLORS = {"Green", "Yellow", "Red"};
+    private static final String[] COLORS = {
+            "Green",
+            "Yellow",
+            "Red"
+    };
     public final AtomicBoolean isSuspended = new AtomicBoolean(false);
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private final JLabel lblLight;

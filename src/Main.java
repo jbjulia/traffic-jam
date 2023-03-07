@@ -39,23 +39,57 @@ public class Main extends JFrame implements Runnable, ChangeListener {
     Intersection B = new Intersection("intersectionB", lblIntersectionB);
     Intersection C = new Intersection("intersectionC", lblIntersectionC);
 
-    Car fordMustang = new Car("fordMustangThread", 300, 0);
+    Car fordMustang = new Car("fordMustangThread", 500, 0);
     Car chevyCamaro = new Car("chevyCamaroThread", 1000, 0);
-    Car dodgeCharger = new Car("dodgeChargerThread", 2000, 1000);
+    Car dodgeCharger = new Car("dodgeChargerThread", 1500, 1000);
     Car teslaModelS = new Car("teslaModelSThread", 2000, 1000);
 
-    Car[] carArray = {fordMustang, chevyCamaro, dodgeCharger, teslaModelS};
-
-    Intersection[] intersectionArray = {A, B, C};
-
-    Object[][] trafficArray = {
-            {"Ford Mustang", fordMustang.getPosition(), 0, 0},
-            {"Chevy Camaro", chevyCamaro.getPosition(), 0, 0},
-            {"Dodge Charger", dodgeCharger.getPosition(), 0, 0},
-            {"Tesla Model S", teslaModelS.getPosition(), 0, 0}
+    Car[] carArray = {
+            fordMustang,
+            chevyCamaro,
+            dodgeCharger,
+            teslaModelS
     };
 
-    String[] columnNames = {"Car", "X Position", "Y Position", "Speed (km/h)"};
+    Intersection[] intersectionArray = {
+            A,
+            B,
+            C
+    };
+
+    Object[][] trafficArray = {
+            {
+                    "Ford Mustang",
+                    fordMustang.getPosition(),
+                    0,
+                    0
+            },
+            {
+                    "Chevy Camaro",
+                    chevyCamaro.getPosition(),
+                    0,
+                    0
+            },
+            {
+                    "Dodge Charger",
+                    dodgeCharger.getPosition(),
+                    0,
+                    0
+            },
+            {
+                    "Tesla Model S",
+                    teslaModelS.getPosition(),
+                    0,
+                    0
+            }
+    };
+
+    String[] columnNames = {
+            "Car",
+            "X Position",
+            "Y Position",
+            "Speed (km/h)"
+    };
 
     private final JTable tblTraffic = new JTable(trafficArray, columnNames);
 
@@ -210,74 +244,71 @@ public class Main extends JFrame implements Runnable, ChangeListener {
 
     private void addActionListeners() {
         btnStart.addActionListener((ActionEvent e) -> {
-                    if (!isRunning.get()) {
-                        System.out.println("START:\t\t" + Thread.currentThread().getName());
-                        A.startThread();
-                        B.startThread();
-                        C.startThread();
-                        fordMustang.startThread();
-                        chevyCamaro.startThread();
-                        dodgeCharger.startThread();
-                        teslaModelS.startThread();
-                        gui.start();
-                    }
-                    btnStart.setEnabled(false);
-                    btnPause.setEnabled(true);
-                    btnStop.setEnabled(true);
-                    isRunning.set(true);
-                }
-        );
+            if (!isRunning.get()) {
+                System.out.println("START:\t\t" + Thread.currentThread().getName());
+                A.startThread();
+                B.startThread();
+                C.startThread();
+                fordMustang.startThread();
+                chevyCamaro.startThread();
+                dodgeCharger.startThread();
+                teslaModelS.startThread();
+                gui.start();
+            }
+            btnStart.setEnabled(false);
+            btnPause.setEnabled(true);
+            btnStop.setEnabled(true);
+            isRunning.set(true);
+        });
 
         btnPause.addActionListener((ActionEvent e) -> {
-                    if (isRunning.get()) {
-                        for (Car i : carArray) {
-                            i.suspendThread();
-                            System.out.println("SUSPEND:\t" + Thread.currentThread().getName());
-                        }
-                        for (Intersection i : intersectionArray) {
-                            i.interruptThread();
-                            i.suspendThread();
-                        }
-                        btnPause.setText("Continue");
-                        btnStart.setEnabled(false);
-                        btnPause.setEnabled(true);
-                        btnStop.setEnabled(false);
-                        isRunning.set(false);
-                    } else {
-                        for (Car i : carArray) {
-                            if (i.isSuspended.get()) {
-                                i.resumeThread();
-                                System.out.println("RESUME:\t\t" + Thread.currentThread().getName());
-                            }
-                        }
-                        for (Intersection i : intersectionArray) {
-                            i.resumeThread();
-                        }
-                        btnPause.setText("Pause");
-                        btnStart.setEnabled(false);
-                        btnPause.setEnabled(true);
-                        btnStop.setEnabled(true);
-                        isRunning.set(true);
+            if (isRunning.get()) {
+                for (Car i : carArray) {
+                    i.suspendThread();
+                    System.out.println("SUSPEND:\t" + Thread.currentThread().getName());
+                }
+                for (Intersection i : intersectionArray) {
+                    i.interruptThread();
+                    i.suspendThread();
+                }
+                btnPause.setText("Continue");
+                btnStart.setEnabled(false);
+                btnPause.setEnabled(true);
+                btnStop.setEnabled(false);
+                isRunning.set(false);
+            } else {
+                for (Car i : carArray) {
+                    if (i.isSuspended.get()) {
+                        i.resumeThread();
+                        System.out.println("RESUME:\t\t" + Thread.currentThread().getName());
                     }
                 }
-        );
+                for (Intersection i : intersectionArray) {
+                    i.resumeThread();
+                }
+                btnPause.setText("Pause");
+                btnStart.setEnabled(false);
+                btnPause.setEnabled(true);
+                btnStop.setEnabled(true);
+                isRunning.set(true);
+            }
+        });
 
         btnStop.addActionListener((ActionEvent e) -> {
-                    if (isRunning.get()) {
-                        System.out.println("STOP:\t\t" + Thread.currentThread().getName());
-                        for (Car i : carArray) {
-                            i.stopThread();
-                        }
-                        for (Intersection i : intersectionArray) {
-                            i.stopThread();
-                        }
-                        btnStart.setEnabled(false);
-                        btnPause.setEnabled(false);
-                        btnStop.setEnabled(false);
-                        isRunning.set(false);
-                    }
+            if (isRunning.get()) {
+                System.out.println("STOP:\t\t" + Thread.currentThread().getName());
+                for (Car i : carArray) {
+                    i.stopThread();
                 }
-        );
+                for (Intersection i : intersectionArray) {
+                    i.stopThread();
+                }
+                btnStart.setEnabled(false);
+                btnPause.setEnabled(false);
+                btnStop.setEnabled(false);
+                isRunning.set(false);
+            }
+        });
     }
 
     @Override
